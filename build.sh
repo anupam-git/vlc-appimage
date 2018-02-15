@@ -1,5 +1,6 @@
 #/bin/bash
 
+echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
 sudo add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
 sudo apt-get update
 sudo apt-get dist-upgrade
