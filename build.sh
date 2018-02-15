@@ -1,5 +1,7 @@
 #/bin/bash
 
+echo $IS_CI
+
 if [ $IS_CI != "true" ]
 then
   echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list

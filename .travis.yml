@@ -9,6 +9,7 @@ before_install:
   - echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
   - sudo add-apt-repository --yes ppa:jonathonf/ffmpeg-3
   - sudo apt-get update -qq
+  - sudo apt-get dist-upgrade
 
 install:  
   - echo "INSTALL"
