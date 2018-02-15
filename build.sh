@@ -1,34 +1,37 @@
 #/bin/bash
 
-echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
-sudo add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
-sudo apt-get update
-sudo apt-get dist-upgrade
+if [ $IS_CI != "true" ]
+then
+  echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
+  sudo add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
+  sudo apt-get update
+  sudo apt-get dist-upgrade
 
-sudo apt-get --yes --force-yes install \
-  build-essential \
-  autoconf \
-  libtool \
-  pkg-config \
-  libtasn1-3-dev \
-  libtasn1-3-bin \
-  libbsd-dev \
-  git \
-  bison \
-  libqt5svg5-dev \
-  automake \
-  autopoint \
-  gettext \
-  cmake \
-  wayland-protocols \
-  protobuf-compiler \
-  libmpg123-dev \
-  libgstreamer-plugins-base1.0-dev \
-  libsystemd-dev \
-  libarchive-dev \
-  libopencv-dev
+  sudo apt-get --yes --force-yes install \
+    build-essential \
+    autoconf \
+    libtool \
+    pkg-config \
+    libtasn1-3-dev \
+    libtasn1-3-bin \
+    libbsd-dev \
+    git \
+    bison \
+    libqt5svg5-dev \
+    automake \
+    autopoint \
+    gettext \
+    cmake \
+    wayland-protocols \
+    protobuf-compiler \
+    libmpg123-dev \
+    libgstreamer-plugins-base1.0-dev \
+    libsystemd-dev \
+    libarchive-dev \
+    libopencv-dev
 
-sudo apt-get build-dep vlc
+  sudo apt-get build-dep vlc
+fi
 
 git clone https://github.com/videolabs/libdsm.git
 cd libdsm
