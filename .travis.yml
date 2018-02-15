@@ -1,0 +1,16 @@
+language: cpp
+compiler: gcc
+sudo: require
+dist: xenial
+
+before_install:
+  - echo "BEFORE INSTALL"
+
+install:
+  - echo "INSTALL"
+
+script:
+  - echo "SCRIPT"
+
+after_success:
+  - echo "AFTER SUCCESS"
