@@ -1,12 +1,12 @@
 language: cpp
 compiler: gcc
 sudo: require
-dist: xenial
+dist: trusty
 
 before_install:
   - echo "BEFORE_INSTALL"
   - export IS_CI=true
-  - echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
+  # - echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
   - sudo add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
   - sudo apt-get update -qq
 
