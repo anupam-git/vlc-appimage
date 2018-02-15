@@ -4,13 +4,14 @@ sudo: require
 dist: xenial
 
 before_install:
-  - echo "BEFORE INSTALL"
+  - echo "BEFORE_INSTALL"
 
-install:
+install:  
   - echo "INSTALL"
 
 script:
   - echo "SCRIPT"
+  - build.sh
 
 after_success:
   - echo "AFTER SUCCESS"
