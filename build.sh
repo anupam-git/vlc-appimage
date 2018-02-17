@@ -1,8 +1,6 @@
 #/bin/bash
 
-echo $IS_CI
-
-if [ $IS_CI != "true" ]
+if [ -z "$IS_CI" ]
 then
   echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
   sudo add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
@@ -40,7 +38,7 @@ cd libdsm
 ./bootstrap
 ./configure
 make -j$(nproc)
-sudo -j$(nproc) make install
+sudo make -j$(nproc) install
 cd ..
 
 git clone https://github.com/sahlberg/libnfs.git
