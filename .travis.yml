@@ -19,6 +19,7 @@ script:
   - echo "SCRIPT"
   - chmod a+x ./build.sh
   - IS_CI=true ./build.sh
+  - curl --upload-file VLC_media_player*.AppImage https://transfer.sh/anupam-git_vlc-appimage
 
 after_success:
   - echo "AFTER SUCCESS"
