@@ -33,29 +33,29 @@ then
   sudo apt-get build-dep vlc
 fi
 
+wget http://download.videolan.org/pub/vlc/3.0.0/vlc-3.0.0.tar.xz
+tar xvJf vlc-3.0.0.tar.xz
+
 git clone https://github.com/videolabs/libdsm.git
 cd libdsm
 ./bootstrap
 ./configure
 make -j$(nproc)
-sudo make -j$(nproc) install
+make -j$(nproc) DESTDIR=$(pwd)/../vlc-3.0.0/build/ install
 cd ..
 
 git clone https://github.com/sahlberg/libnfs.git
 cd libnfs/
 cmake .
 make -j$(nproc)
-sudo make -j$(nproc) install
+make -j$(nproc) DESTDIR=$(pwd)/../vlc-3.0.0/build/ install
 cd ..
 
-wget http://download.videolan.org/pub/vlc/3.0.0/vlc-3.0.0.tar.xz
-tar xvJf vlc-3.0.0.tar.xz
 cd vlc-3.0.0
 
-mkdir build
-./configure --enable-chromecast=no --prefix=$(pwd)/build
+./configure --enable-chromecast=no --prefix=/usr
 make -j$(nproc)
-make -j$(nproc) install
+make -j$(nproc) DESTDIR=$(pwd)/build/ install
 cd ..
 
 wget -q https://github.com/AppImage/AppImages/raw/master/functions.sh -O ./functions.sh
@@ -64,13 +64,8 @@ chmod a+x functions.sh
 get_apprun
 
 cp org.videolan.vlc.desktop vlc-3.0.0/build/
-cp AppRun vlc-3.0.0/build/
-cp  vlc-3.0.0/build/share/icons/hicolor/256x256/apps/vlc.png  vlc-3.0.0/build/
-mkdir -p vlc-3.0.0/build/usr
-mv vlc-3.0.0/build/bin vlc-3.0.0/build/usr/
-mv vlc-3.0.0/build/include vlc-3.0.0/build/usr/
-mv vlc-3.0.0/build/lib vlc-3.0.0/build/usr/
-mv vlc-3.0.0/build/share vlc-3.0.0/build/usr/
+mv AppRun vlc-3.0.0/build/
+cp vlc-3.0.0/build/usr/share/icons/hicolor/256x256/apps/vlc.png  vlc-3.0.0/build/
 
 wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 chmod a+x appimagetool-x86_64.AppImage
