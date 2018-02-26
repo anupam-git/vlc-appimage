@@ -2,7 +2,9 @@
 
 if [ -z "$IS_CI" ]
 then
-  echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
+  echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | tee /etc/apt/sources.list.d/trusty.list
+  apt-get update
+  apt-get --yes --force-yes install python-software-properties software-properties-common
   add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
   add-apt-repository universe --yes
   apt-get update
