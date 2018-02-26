@@ -4,14 +4,16 @@ if [ -z "$IS_CI" ]
 then
   echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
   sudo add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
+  sudo add-apt-repository universe --yes
   sudo apt-get update
-  sudo apt-get dist-upgrade
+  sudo apt-get --yes --force-yes dist-upgrade
 
   sudo apt-get --yes --force-yes install \
     build-essential \
     autoconf \
     libtool \
     pkg-config \
+    patchelf \
     libtasn1-3-dev \
     libtasn1-3-bin \
     libbsd-dev \
@@ -33,40 +35,49 @@ then
   sudo apt-get build-dep vlc
 fi
 
+chmod a+x run-patchelf.sh
+
 wget http://download.videolan.org/pub/vlc/3.0.0/vlc-3.0.0.tar.xz
-tar xvJf vlc-3.0.0.tar.xz
+tar xJf vlc-3.0.0.tar.xz
+
+wget "https://github.com/azubieta/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+# wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+
+wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+chmod a+x appimagetool-x86_64.AppImage
 
 git clone https://github.com/videolabs/libdsm.git
 cd libdsm
 ./bootstrap
 ./configure
 make -j$(nproc)
-make -j$(nproc) DESTDIR=$(pwd)/../vlc-3.0.0/build/ install
+sudo make -j$(nproc) install
 cd ..
 
 git clone https://github.com/sahlberg/libnfs.git
 cd libnfs/
 cmake .
 make -j$(nproc)
-make -j$(nproc) DESTDIR=$(pwd)/../vlc-3.0.0/build/ install
+sudo make -j$(nproc) install
 cd ..
 
 cd vlc-3.0.0
-
 ./configure --enable-chromecast=no --prefix=/usr
 make -j$(nproc)
 make -j$(nproc) DESTDIR=$(pwd)/build/ install
-cd ..
+cd build
 
-wget -q https://github.com/AppImage/AppImages/raw/master/functions.sh -O ./functions.sh
-chmod a+x functions.sh
-. functions.sh
-get_apprun
+cp ../../org.videolan.vlc.desktop ./
+cp ./usr/share/icons/hicolor/256x256/apps/vlc.png ./
+mkdir -p ./usr/plugins/iconengines/
+cp /usr/lib/x86_64-linux-gnu/qt5/plugins/iconengines/libqsvgicon.so ./usr/plugins/iconengines/
+mkdir -p ./usr/plugins/platforms/
+cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/libqxcb.so ./usr/plugins/platforms/
+../../run-patchelf.sh
+LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ../../linuxdeployqt-continuous-x86_64.AppImage org.videolan.vlc.desktop -bundle-non-qt-libs
+# LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ../../linuxdeployqt-continuous-x86_64.AppImage org.videolan.vlc.desktop -appimage
 
-cp org.videolan.vlc.desktop vlc-3.0.0/build/
-mv AppRun vlc-3.0.0/build/
-cp vlc-3.0.0/build/usr/share/icons/hicolor/256x256/apps/vlc.png  vlc-3.0.0/build/
+rm usr/lib/vlc/plugins/plugins.dat
 
-wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-chmod a+x appimagetool-x86_64.AppImage
-./appimagetool-x86_64.AppImage vlc-3.0.0/build/
+../../appimagetool-x86_64.AppImage ./
