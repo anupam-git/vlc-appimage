@@ -37,49 +37,58 @@ then
   apt-get build-dep vlc
 fi
 
-chmod a+x run-patchelf.sh
+(
+  git clone https://github.com/videolabs/libdsm.git
+  cd libdsm
+  ./bootstrap
+  ./configure
+  make -j$(nproc)
+  make -j$(nproc) install
+)
 
-wget http://download.videolan.org/pub/vlc/3.0.0/vlc-3.0.0.tar.xz
-tar xJf vlc-3.0.0.tar.xz
+(
+  git clone https://github.com/sahlberg/libnfs.git
+  cd libnfs/
+  cmake .
+  make -j$(nproc)
+  make -j$(nproc) install
+)
+
+(
+  wget http://download.videolan.org/pub/vlc/3.0.0/vlc-3.0.0.tar.xz
+  tar xJf vlc-3.0.0.tar.xz
+  cd vlc-3.0.0
+  ./configure --enable-chromecast=no --prefix=/usr
+  make -j$(nproc)
+  make -j$(nproc) DESTDIR=$(pwd)/build/ install
+  cd build
+  cp ../../org.videolan.vlc.desktop ./
+  cp ./usr/share/icons/hicolor/256x256/apps/vlc.png ./
+  mkdir -p ./usr/plugins/iconengines/
+  cp /usr/lib/x86_64-linux-gnu/qt5/plugins/iconengines/libqsvgicon.so ./usr/plugins/iconengines/
+  mkdir -p ./usr/plugins/platforms/
+  cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/libqxcb.so ./usr/plugins/platforms/
+  rm usr/lib/vlc/plugins/plugins.dat
+)
+
+chmod a+x run-patchelf.sh
+run-patchelf.sh
 
 wget "https://github.com/azubieta/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 # wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true linuxdeployqt-continuous-x86_64.AppImage vlc-3.0.0/build/org.videolan.vlc.desktop -bundle-non-qt-libs
+# LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ../../linuxdeployqt-continuous-x86_64.AppImage org.videolan.vlc.desktop -appimage
+
+mkdir release
 
 wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 chmod a+x appimagetool-x86_64.AppImage
+appimagetool-x86_64.AppImage vlc-3.0.0/build/
+cp VLC_media_player*.AppImage release/
 
-git clone https://github.com/videolabs/libdsm.git
-cd libdsm
-./bootstrap
-./configure
-make -j$(nproc)
-make -j$(nproc) install
-cd ..
+md5sum VLC_media_player*.AppImage > release/md5.txt
 
-git clone https://github.com/sahlberg/libnfs.git
-cd libnfs/
-cmake .
-make -j$(nproc)
-make -j$(nproc) install
-cd ..
-
-cd vlc-3.0.0
-./configure --enable-chromecast=no --prefix=/usr
-make -j$(nproc)
-make -j$(nproc) DESTDIR=$(pwd)/build/ install
-cd build
-
-cp ../../org.videolan.vlc.desktop ./
-cp ./usr/share/icons/hicolor/256x256/apps/vlc.png ./
-mkdir -p ./usr/plugins/iconengines/
-cp /usr/lib/x86_64-linux-gnu/qt5/plugins/iconengines/libqsvgicon.so ./usr/plugins/iconengines/
-mkdir -p ./usr/plugins/platforms/
-cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/libqxcb.so ./usr/plugins/platforms/
-../../run-patchelf.sh
-LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ../../linuxdeployqt-continuous-x86_64.AppImage org.videolan.vlc.desktop -bundle-non-qt-libs
-# LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ../../linuxdeployqt-continuous-x86_64.AppImage org.videolan.vlc.desktop -appimage
-
-rm usr/lib/vlc/plugins/plugins.dat
-
-../../appimagetool-x86_64.AppImage ./
+wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
+curl --upload-file VLC_media_player*.AppImage https://transfer.sh/ > release/URL
+sh ./u.sh release/*
