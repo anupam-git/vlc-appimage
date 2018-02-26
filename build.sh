@@ -4,13 +4,14 @@ if [ -z "$IS_CI" ]
 then
   echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | tee /etc/apt/sources.list.d/trusty.list
   apt-get update
-  apt-get --yes --force-yes install python-software-properties software-properties-common
+  apt-get --yes install python-software-properties software-properties-common
   add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
   add-apt-repository universe --yes
   apt-get update
-  apt-get --yes --force-yes dist-upgrade
+  apt-get --yes dist-upgrade
 
-  apt-get --yes --force-yes install \
+  apt-get --yes install \
+    curl
     build-essential \
     autoconf \
     libtool \
@@ -34,7 +35,7 @@ then
     libarchive-dev \
     libopencv-dev
 
-  apt-get build-dep vlc
+  apt-get build-dep vlc --yes
 fi
 
 (
