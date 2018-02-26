@@ -12,7 +12,7 @@ before_install:
 
 install:  
   - echo "INSTALL"
-  - sudo apt-get --yes --force-yes --allow-unauthenticated install build-essential autoconf libtool pkg-config libtasn1-3-dev libtasn1-3-bin libbsd-dev git bison libqt5svg5-dev automake autopoint gettext cmake wayland-protocols protobuf-compiler libmpg123-dev libgstreamer-plugins-base1.0-dev libsystemd-dev libarchive-dev libopencv-dev
+  - sudo apt-get --yes --force-yes --allow-unauthenticated install build-essential autoconf libtool pkg-config libtasn1-3-dev libtasn1-3-bin libbsd-dev git bison qtbase5-dev qtdeclarative5-dev libqt5svg5-dev automake autopoint gettext cmake wayland-protocols protobuf-compiler libmpg123-dev libgstreamer-plugins-base1.0-dev libsystemd-dev libarchive-dev libopencv-dev
   - sudo apt-get build-dep vlc
 
 script:
