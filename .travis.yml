@@ -1,25 +1,10 @@
-language: cpp
-compiler: gcc
-sudo: require
-dist: xenial
+sudo: required
+
+services:
+  - docker
 
 before_install:
-  - echo "BEFORE_INSTALL"
-  - echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
-  - sudo add-apt-repository --yes ppa:jonathonf/ffmpeg-3
-  - sudo apt-get update -qq
-  - sudo apt-get dist-upgrade
-
-install:  
-  - echo "INSTALL"
-  - sudo apt-get --yes --force-yes --allow-unauthenticated install build-essential autoconf libtool pkg-config libtasn1-3-dev libtasn1-3-bin libbsd-dev git bison qtbase5-dev qtdeclarative5-dev libqt5svg5-dev automake autopoint gettext cmake wayland-protocols protobuf-compiler libmpg123-dev libgstreamer-plugins-base1.0-dev libsystemd-dev libarchive-dev libopencv-dev
-  - sudo apt-get build-dep vlc
+  - docker pull nxos/nxos
 
 script:
-  - echo "SCRIPT"
-  - chmod a+x ./build.sh
-  - IS_CI=true ./build.sh
-  - curl --upload-file VLC_media_player*.AppImage https://transfer.sh/anupam-git_vlc-appimage.appimage
-
-after_success:
-  - echo "AFTER SUCCESS"
+  - docker run --rm -v $(pwd)/:/build/ -w /build/ nxos/nxos IS_CI=true bash build.sh
