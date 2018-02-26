@@ -3,12 +3,12 @@
 if [ -z "$IS_CI" ]
 then
   echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | sudo tee /etc/apt/sources.list.d/trusty.list
-  sudo add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
-  sudo add-apt-repository universe --yes
-  sudo apt-get update
-  sudo apt-get --yes --force-yes dist-upgrade
+  add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
+  add-apt-repository universe --yes
+  apt-get update
+  apt-get --yes --force-yes dist-upgrade
 
-  sudo apt-get --yes --force-yes install \
+  apt-get --yes --force-yes install \
     build-essential \
     autoconf \
     libtool \
@@ -32,7 +32,7 @@ then
     libarchive-dev \
     libopencv-dev
 
-  sudo apt-get build-dep vlc
+  apt-get build-dep vlc
 fi
 
 chmod a+x run-patchelf.sh
@@ -52,14 +52,14 @@ cd libdsm
 ./bootstrap
 ./configure
 make -j$(nproc)
-sudo make -j$(nproc) install
+make -j$(nproc) install
 cd ..
 
 git clone https://github.com/sahlberg/libnfs.git
 cd libnfs/
 cmake .
 make -j$(nproc)
-sudo make -j$(nproc) install
+make -j$(nproc) install
 cd ..
 
 cd vlc-3.0.0
