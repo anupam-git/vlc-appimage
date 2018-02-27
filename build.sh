@@ -67,7 +67,7 @@ echo ""
 
 md5sum ./VLC_media_player*.AppImage
 
-wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
-chmod a+x ./u.sh
-curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/
-./u.sh release/*
+curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/vlc-3.0.0.AppImage
+# wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
+# chmod a+x ./u.sh
+# ./u.sh release/*
