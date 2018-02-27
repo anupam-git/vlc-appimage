@@ -6,6 +6,11 @@ services:
 before_install:
   - docker pull nxos/nxos
 
+after_success:
+  - wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
+  - chmod a+x ./u.sh
+  - ./u.sh release/*
+
 script:
   - docker run --rm -v $(pwd)/:/build/ -w /build/ nxos/nxos bash build.sh
 
