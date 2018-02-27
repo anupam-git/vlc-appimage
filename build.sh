@@ -61,9 +61,13 @@ chmod a+x ./appimagetool-x86_64.AppImage
 appimage-wrapper appimagetool-x86_64.AppImage vlc-3.0.0/build/
 cp ./VLC_media_player*.AppImage release/
 
-md5sum ./VLC_media_player*.AppImage > release/md5.txt
+echo ""
+echo "############################################################################"
+echo ""
+
+md5sum ./VLC_media_player*.AppImage
 
 wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
 chmod a+x ./u.sh
-curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/ > release/URL
+curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/
 ./u.sh release/*
