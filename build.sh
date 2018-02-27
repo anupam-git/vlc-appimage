@@ -35,6 +35,7 @@ apt-get build-dep vlc --yes
   ./configure --enable-chromecast=no --prefix=/usr
   make -j$(nproc)
   make -j$(nproc) DESTDIR=$(pwd)/build/ install
+  chmod 755 -R ./vlc-3.0.0/build
   cd build
   cp ../../org.videolan.vlc.desktop ./
   cp ./usr/share/icons/hicolor/256x256/apps/vlc.png ./
@@ -43,6 +44,7 @@ apt-get build-dep vlc --yes
   mkdir -p ./usr/plugins/platforms/
   cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/libqxcb.so ./usr/plugins/platforms/
   rm usr/lib/vlc/plugins/plugins.dat
+  ./vlc-3.0.0/build/usr/lib/vlc/vlc-cache-gen ./vlc-3.0.0/build/usr/lib/vlc/plugins
 )
 
 chmod a+x ./run-patchelf.sh
@@ -51,7 +53,7 @@ chmod a+x ./run-patchelf.sh
 wget "https://github.com/azubieta/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 # wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 chmod a+x ./linuxdeployqt-continuous-x86_64.AppImage
-LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage vlc-3.0.0/build/org.videolan.vlc.desktop -bundle-non-qt-libs
+# LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage vlc-3.0.0/build/org.videolan.vlc.desktop -bundle-non-qt-libs
 LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage vlc-3.0.0/build/org.videolan.vlc.desktop -appimage
 
 mkdir release
