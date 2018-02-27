@@ -7,7 +7,7 @@ add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
 add-apt-repository universe --yes
 apt-get update
 apt-get --yes dist-upgrade
-apt-get --yes install libsystemd-dev libarchive-dev curl build-essential autoconf libtool pkg-config patchelf libtasn1-3-dev libtasn1-3-bin libbsd-dev git bison libqt5svg5-dev automake autopoint gettext cmake wayland-protocols protobuf-compiler libmpg123-dev libgstreamer-plugins-base1.0-dev libsystemd-dev libarchive-dev libopencv-dev
+apt-get --yes install libsystemd-dev libarchive-dev curl build-essential autoconf libtool pkg-config patchelf libtasn1-3-dev libtasn1-3-bin libbsd-dev git bison qtbase5-private-dev libqt5svg5-dev automake autopoint gettext cmake wayland-protocols protobuf-compiler libmpg123-dev libgstreamer-plugins-base1.0-dev libsystemd-dev libarchive-dev libopencv-dev 
 
 apt-get build-dep vlc --yes
 
