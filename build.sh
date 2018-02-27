@@ -65,7 +65,7 @@ echo ""
 echo "############################################################################"
 echo ""
 
-curl -v --upload-file ./VLC_media_player*.AppImage https://transfer.sh/vlc-3.0.0.AppImage
+curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/vlc-3.0.0.AppImage
 
 # md5sum ./VLC_media_player*.AppImage
 # wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
