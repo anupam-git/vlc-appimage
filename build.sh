@@ -56,20 +56,20 @@ chmod a+x ./linuxdeployqt-continuous-x86_64.AppImage
 LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage vlc-3.0.0/build/org.videolan.vlc.desktop -bundle-non-qt-libs
 LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage vlc-3.0.0/build/org.videolan.vlc.desktop -appimage
 
-mkdir release
-
 # wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 # chmod a+x ./appimagetool-x86_64.AppImage
 # appimage-wrapper appimagetool-x86_64.AppImage vlc-3.0.0/build/
-# cp ./VLC_media_player*.AppImage release/
 
 echo ""
 echo "############################################################################"
 echo ""
 
-curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/vlc-3.0.0.AppImage
+mkdir -p release
 
-# md5sum ./VLC_media_player*.AppImage
-# wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
-# chmod a+x ./u.sh
-# ./u.sh release/*
+cp ./VLC_media_player*.AppImage release/
+md5sum ./VLC_media_player*.AppImage > release/MD5.txt
+curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/vlc-3.0.0.AppImage > release/URL
+
+wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
+chmod a+x ./u.sh
+./u.sh release/*

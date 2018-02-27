@@ -8,3 +8,8 @@ before_install:
 
 script:
   - docker run --rm -v $(pwd)/:/build/ -w /build/ nxos/nxos bash build.sh
+
+branches:
+  except:
+    - # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)$/
