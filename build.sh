@@ -15,7 +15,7 @@ apt-get build-dep vlc --yes
   git clone https://github.com/videolabs/libdsm.git
   cd libdsm
   ./bootstrap
-  ./configure
+  ./configure --prefix=/usr
   make -j$(nproc)
   make -j$(nproc) install
 )
@@ -23,7 +23,7 @@ apt-get build-dep vlc --yes
 (
   git clone https://github.com/sahlberg/libnfs.git
   cd libnfs/
-  cmake .
+  cmake -DCMAKE_INSTALL_PREFIX=/usr .
   make -j$(nproc)
   make -j$(nproc) install
 )
