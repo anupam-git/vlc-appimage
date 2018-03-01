@@ -1,5 +1,7 @@
 #/bin/bash
 
+VLC_VERSION="vlc-3.0.0"
+
 echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | tee /etc/apt/sources.list.d/trusty.list
 apt-get update
 apt-get --yes install python-software-properties software-properties-common
@@ -29,13 +31,13 @@ apt-get build-dep vlc --yes
 )
 
 (
-  wget http://download.videolan.org/pub/vlc/3.0.0/vlc-3.0.0.tar.xz
-  tar xJf vlc-3.0.0.tar.xz
-  cd vlc-3.0.0
+  wget http://download.videolan.org/pub/vlc/3.0.0/$VLC_VERSION.tar.xz
+  tar xJf $VLC_VERSION.tar.xz
+  cd $VLC_VERSION
   ./configure --enable-chromecast=no --prefix=/usr
   make -j$(nproc)
   make -j$(nproc) DESTDIR=$(pwd)/build/ install
-  chmod 755 -R ./vlc-3.0.0/build
+  chmod 755 -R ./$VLC_VERSION/build
   cd build
   cp ../../org.videolan.vlc.desktop ./
   cp ./usr/share/icons/hicolor/256x256/apps/vlc.png ./
@@ -44,21 +46,16 @@ apt-get build-dep vlc --yes
   mkdir -p ./usr/plugins/platforms/
   cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/libqxcb.so ./usr/plugins/platforms/
   rm usr/lib/vlc/plugins/plugins.dat
-  ./vlc-3.0.0/build/usr/lib/vlc/vlc-cache-gen ./vlc-3.0.0/build/usr/lib/vlc/plugins
+  ./$VLC_VERSION/build/usr/lib/vlc/vlc-cache-gen ./$VLC_VERSION/build/usr/lib/vlc/plugins
 )
 
 chmod a+x ./run-patchelf.sh
-./run-patchelf.sh
+VLC_VERSION=$VLC_VERSION ./run-patchelf.sh
 
 wget "https://github.com/azubieta/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-# wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 chmod a+x ./linuxdeployqt-continuous-x86_64.AppImage
-LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage vlc-3.0.0/build/org.videolan.vlc.desktop -bundle-non-qt-libs
-LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ARCH=x86_64 appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage vlc-3.0.0/build/org.videolan.vlc.desktop -appimage
-
-# wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-# chmod a+x ./appimagetool-x86_64.AppImage
-# appimage-wrapper appimagetool-x86_64.AppImage vlc-3.0.0/build/
+LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage $VLC_VERSION/build/org.videolan.vlc.desktop -bundle-non-qt-libs
+LINUX_DEPLOY_QT_EXCLUDE_COPYRIGHTS=true ARCH=x86_64 appimage-wrapper linuxdeployqt-continuous-x86_64.AppImage $VLC_VERSION/build/org.videolan.vlc.desktop -appimage
 
 echo ""
 echo "############################################################################"
@@ -68,4 +65,4 @@ mkdir -p release
 
 cp ./VLC_media_player*.AppImage release/
 md5sum ./VLC_media_player*.AppImage > release/MD5.txt
-curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/vlc-3.0.0.AppImage > release/URL
+curl --upload-file ./VLC_media_player*.AppImage https://transfer.sh/$VLC_VERSION.AppImage > release/URL
