@@ -4,12 +4,7 @@ services:
   - docker
 
 before_install:
-  - docker pull nxos/nxos
-
-after_success:
-  - wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
-  - chmod a+x ./u.sh
-  - ./u.sh release/*
+  - docker pull ubuntu:trusty
 
 script:
   - docker run --rm -v $(pwd)/:/build/ -w /build/ nxos/nxos bash build.sh
@@ -18,3 +13,13 @@ branches:
   except:
     - # Do not build tags that we create when we upload to GitHub Releases
     - /^(?i:continuous)$/
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script:
+      - wget https://github.com/probonopd/uploadtool/raw/master/upload.sh -O u.sh
+      - chmod a+x ./u.sh
+      - ./u.sh release/*
+    on:
+      branch: master
