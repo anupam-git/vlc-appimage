@@ -3,14 +3,18 @@
 VLC_VERSION="vlc-3.0.0"
 
 # echo "deb http://in.archive.ubuntu.com/ubuntu/ trusty main" | tee /etc/apt/sources.list.d/trusty.list
+wget https://archive.neon.kde.org/public.key -O neon.key
+apt-key add neon.key
+echo "deb https://archive.neon.kde.org/user/ xenial main" > /etc/apt/sources.list.d/neon.list
+
 apt-get update
-apt-get --yes install python-software-properties software-properties-common
+apt-get --yes install python-software-properties software-properties-common apt-transport-https ca-certificates
 add-apt-repository ppa:jonathonf/ffmpeg-3 --yes
 add-apt-repository universe --yes
 add-apt-repository ppa:beineri/opt-qt-5.10.1-trusty
 apt-get update
 apt-get --yes dist-upgrade
-apt-get --yes install libsystemd-dev libarchive-dev curl build-essential autoconf libtool pkg-config patchelf qt510-meta-full libtasn1-3-dev libtasn1-3-bin libbsd-dev git bison qtbase5-private-dev libqt5svg5-dev automake autopoint gettext cmake wayland-protocols protobuf-compiler libmpg123-dev libgstreamer-plugins-base1.0-dev libsystemd-dev libarchive-dev libopencv-dev 
+apt-get --yes install libsystemd-dev libarchive-dev git wget curl build-essential autoconf libtool pkg-config patchelf libtasn1-3-dev libtasn1-3-bin libbsd-dev git bison qtbase5-dev qtdeclarative5-dev extra-cmake-modules plasma-framework-dev libqt5xmlpatterns5-dev qtdeclarative5-dev-tools qml-module-qtgraphicaleffects qtbase5-private-dev libqt5svg5-dev automake autopoint gettext cmake wayland-protocols protobuf-compiler libmpg123-dev libgstreamer-plugins-base1.0-dev libsystemd-dev libarchive-dev libopencv-dev 
 
 apt-get build-dep vlc --yes
 
